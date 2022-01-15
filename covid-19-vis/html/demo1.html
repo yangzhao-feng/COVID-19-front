@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />  
+        <style type="text/css">  
+            html{height:100%;width:100%}    
+            body{height:100%;margin:0px;padding:0px}    
+            #container{height:100%}    
+        </style> 
+<!-- 引用百度地图API文件 -->
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=aCkho2YWwtnNf2ydI4uEVBfRpTo0Mp1b"></script>
+</head>
+<body>
+    <!-- 地图需要一个HTML元素作为容器，这样才能展现到页面上。这里我们创建了一个div元素。 -->
+    <div id="container"></div> 
+
+    <script type="text/javascript" >
+            //创建地图实例
+        var map = new BMap.Map("container");
+        //设置中心点坐标
+        var point = new BMap.Point(116.404, 39.915);
+        //地图初始化，同时设置地图展示级别
+        map.centerAndZoom(point, 15);
+        map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+        /**百度地图控件**/
+        map.addControl(new BMap.NavigationControl());  //平移缩放控件
+        var scl = {offset: new BMap.Size(0, 50)};//比例尺控件的位置Size（X，Y）
+        map.addControl(new BMap.ScaleControl(scl)); //比例尺控件初始化
+        map.addControl(new BMap.OverviewMapControl()); //缩略图控件
+        map.addControl(new BMap.MapTypeControl());  //地图模式控件
+
+        var adds = [
+            [116.307852,40.057031,"<div>这是一个div111</div>"],
+            [116.313082,40.047674,"<div>这是一个div222</div>"],
+            [116.328749,40.026922,"<div>这是一个div333</div>"],
+            [116.347571,39.988698,"<div>这是一个div444</div>"],
+            [116.316163,39.997753,"<div>这是一个div555</div>"],
+            [116.345867,39.998333,"<div>这是一个div666</div>"],
+            [116.403472,39.999411,"<div>这是一个div777</div>"],
+            [116.307901,40.05901,"<div>这是一个div888</div>"],
+            [117.307901,40.05901,"<div>这是一个div999</div>"],
+            [118.307901,40.05901,"<div>这是一个div1000</div>"],
+            [119.307901,40.05901,"<div>这是一个div1100</div>"],
+            [120.307901,40.05901,"<div>这是一个div1200</div>"],
+            [122.307852,40.057031,"<div>我</div>"],
+            [124.313082,40.047674,"<div>就</div>"],
+            [106.328749,40.026922,"<div>是</div>"],
+            [126.347571,39.988698,"<div>那</div>"],
+            [146.316163,39.997753,"<div>么</div>"],
+            [136.345867,39.998333,"<div>样</div>"],
+            [176.403472,39.999411,"<div>的</div>"],
+            [102.537757,31.809768,"<div>皮</div>"]
+     
+        ];
+        
+        
+        
+    /**标注的信息窗口**/
+        var opts = {
+                    width : 300,     // 信息窗口宽度
+                    height: 100,     // 信息窗口高度
+                    enableMessage:true//设置允许信息窗发送短息
+                   };
+        for(var i=0;i<adds.length;i++){
+            var marker = new BMap.Marker(new BMap.Point(adds[i][0],adds[i][1]));  // 创建标注
+            var content = adds[i][2];
+            map.addOverlay(marker);               // 将标注添加到地图中
+            addClickHandler(content,marker);
+        }
+        function addClickHandler(content,marker){
+            marker.addEventListener("click",function(e){
+                openInfo(content,e)}
+            );
+        }
+        function openInfo(content,e){
+            var p = e.target;
+            var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+            var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象
+            map.openInfoWindow(infoWindow,point); //开启信息窗口
+        }
+    </script>  
+    </body>
+</html>
+

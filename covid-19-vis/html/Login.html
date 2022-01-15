@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COVID-19 可视化平台 Log in</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+
+  <style>
+    body{
+   		 background:url(../images/background3.jpg) no-repeat center top;
+   		 background-size:cover;
+   		 background-attachment:fixed;
+		}
+    </style>
+
+</head>
+
+<body class="hold-transition login-page dark-mode">
+<div class="login-box"  id="login">
+  <div class="login-logo">
+    <a href="homePage.html">COVID-19 信息可视化</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">请登录</p>
+
+      <form>
+        <div class="input-group mb-3">
+          <input type="email" class="form-control" placeholder="Email" v-model="email">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" placeholder="Password" v-model="password">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="row">
+        <div class="col-8">
+          <div class="icheck-primary">
+            <input type="checkbox" id="remember">
+            <label for="remember">
+              Remember Me
+            </label>
+          </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-4">
+          <button type="submit" @click="doLogin()" class="btn btn-primary btn-block">Sign In</button>
+        </div>
+        <!-- /.col -->
+      </div>
+
+      <div class="social-auth-links text-center mb-3">
+        <p>- OR -</p>
+        <a href="#" class="btn btn-block btn-primary">
+          <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
+        </a>
+        <a href="#" class="btn btn-block btn-danger">
+          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+        </a>
+      </div>
+      <!-- /.social-auth-links -->
+
+      <p class="mb-1">
+        <a href="forgot-password.html">I forgot my password</a>
+      </p>
+      <p class="mb-0">
+        <a href="register.html" class="text-center">Register a new membership</a>
+      </p>
+    </div>
+    <!-- /.login-card-body -->
+  </div>
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery -->
+<script src="../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../dist/js/adminlte.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.9/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="../JS/app.js"></script>
+<script type="text/javascript">
+  var index = new Vue({
+    el: "#login",
+    data: {
+      email: null,
+      password: null,
+      realname: '',
+
+      returnUrl: ""
+    },
+    // created() {
+
+    //   // 登录成功后会跳原来页面
+    //   var returnUrl = app.getUrlParam("returnUrl");
+    //   if (returnUrl != null && returnUrl != undefined && returnUrl != '') {
+    //     this.returnUrl = returnUrl;
+    //   }
+    // },
+    methods: {
+      getRequest() {
+      },
+      postRequest() {
+      },
+      doLogin() {
+
+        if (this.email == null || this.email == undefined || this.email == '') {
+          alert("用户名不能为空");
+          return;
+        } else if (this.password == null || this.password == undefined || this.password == '') {
+          alert("密码不能为空");
+          return;
+        } else if (this.password.length < 6) {
+          alert("密码不能少于6位");
+          return;
+        }
+
+        var userBO = {
+          email: this.email,
+          password: this.password,
+
+        };
+        // console.log(userBO);
+
+        var serverUrl = "http://101.35.156.227:20001";
+
+        var returnUrl = this.returnUrl;
+        // form提交
+        axios.defaults.withCredentials = true;
+        // console.log(axios.defaults);
+        axios.post(serverUrl + '/passport/login', userBO)
+          .then((response) => {
+            if(response.data.status=="200")
+            {
+              document.cookie="username="+response.data.data.username;
+              document.cookie="realname="+response.data.data.realname;
+              document.cookie="email="+response.data.data.email;
+
+            }else{
+              alert("登录失败");
+            }
+          });
+      }
+    }
+  });
+</script>
+</body>
+</html>

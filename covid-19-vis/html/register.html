@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Registration Page</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+  
+  <style>
+    body{
+   		 background:url(../images/background3.jpg) no-repeat center top;
+   		 background-size:cover;
+   		 background-attachment:fixed;
+		}
+    </style>
+</head>
+<body class="hold-transition register-page dark-mode">
+<div class="register-box">
+  <div class="register-logo">
+    <a href="homePage.html">COVID-19 信息可视化</a>
+  </div>
+
+  <div class="card" id="register">
+    <div class="card-body register-card-body">
+      <p class="login-box-msg">注册</p>
+
+      <form action="../../index.html" method="post">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="username" v-model="username">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Full name" v-model="realname">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="email" class="form-control" placeholder="Email" v-model="email">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" placeholder="Password" v-model="password">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" placeholder="Retype password">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="row">
+        <div class="col-8">
+          <div class="icheck-primary">
+            <input type="checkbox" id="agreeTerms" name="terms" value="agree">
+            <label for="agreeTerms">
+             I agree to the <a href="#">terms</a>
+            </label>
+          </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-4">
+          <button type="submit" @click="doLogin" class="btn btn-primary btn-block">Register</button>
+        </div>
+        <!-- /.col -->
+      </div>
+
+      <div class="social-auth-links text-center">
+        <p>- OR -</p>
+        <a href="#" class="btn btn-block btn-primary">
+          <i class="fab fa-facebook mr-2"></i>
+          Sign up using Facebook
+        </a>
+        <a href="#" class="btn btn-block btn-danger">
+          <i class="fab fa-google-plus mr-2"></i>
+          Sign up using Google+
+        </a>
+      </div>
+
+      <a href="login.html" class="text-center">I already have a membership</a>
+    </div>
+    <!-- /.form-box -->
+  </div><!-- /.card -->
+</div>
+<!-- /.register-box -->
+
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>
+<!-- 1、导入Vue的包 -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="../JS/app.js"></script>
+<script type="text/javascript">
+  var index = new Vue({
+    el: "#register",
+    data: {
+      username: null,
+      password: null,
+      email:null,
+      realname:null,
+
+      returnUrl: ""
+    },
+    // created() {
+
+    //   // 登录成功后会跳原来页面
+    //   var returnUrl = app.getUrlParam("returnUrl");
+    //   if (returnUrl != null && returnUrl != undefined && returnUrl != '') {
+    //     this.returnUrl = returnUrl;
+    //   }
+    // },
+    methods: {
+      getRequest() {
+      },
+      postRequest() {
+      },
+      doLogin() {
+
+        if (this.username == null || this.username == undefined || this.username == '') {
+          alert("用户名不能为空");
+          return;
+        } else if (this.password == null || this.password == undefined || this.password == '') {
+          alert("密码不能为空");
+          return;
+        } else if (this.password.length < 6) {
+          alert("密码不能少于6位");
+          return;
+        }else if (this.email == null || this.email == undefined || this.email == '') {
+          alert("邮箱不能为空");
+          return;
+        }else if (this.realname == null || this.realname == undefined || this.realname == '') {
+          alert("真实名字不能为空");
+          return;
+        }
+
+        var userBO = {
+          username: this.username,
+          password: this.password,
+          realname:this.realname,
+          email:this.email
+        };
+
+        var serverUrl = "http://101.35.156.227:20001";
+
+        var returnUrl = "";
+        // form提交
+        axios.defaults.withCredentials = true;
+        console.log(axios.defaults);
+        axios.post(serverUrl + '/passport/register', userBO)
+          .then(res => {
+            if (res.data.status == 200) {
+              var user = res.data;
+              window.app.setCookie(user);
+              console.log(user);
+
+              // window.location.href = app.ctx + "/index.html";
+              if (returnUrl != null && returnUrl != undefined && returnUrl != '') {
+                window.location.href = returnUrl;
+              } else {
+                window.location.href = "Login.html";
+              }
+
+            } else if (res.data.status == 500) {
+              alert(res.data.msg);
+              return;
+            }
+          });
+      }
+    }
+  });
+</script>
+</body>
+</html>
